@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Events — GFG CGC{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🗓️ Events</h1>
+  <p>Workshops, hackathons, and meetups by the GFG CGC Chapter</p>
+</div>
+
+<!-- Filters -->
+<div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+  <div>
+    <strong style="font-size:0.85rem;color:#6b7280;">MODE</strong><br>
+    <div style="display:flex;gap:0.5rem;margin-top:0.4rem;">
+      <a href="?" class="badge {% if not selected_mode %}badge-green{% else %}badge-gray{% endif %}">All</a>
+      <a href="?mode=online"  class="badge {% if selected_mode == 'online'  %}badge-blue{% else %}badge-gray{% endif %}">🌐 Online</a>
+      <a href="?mode=offline" class="badge {% if selected_mode == 'offline' %}badge-orange{% else %}badge-gray{% endif %}">📍 Offline</a>
+      <a href="?mode=hybrid"  class="badge {% if selected_mode == 'hybrid'  %}badge-green{% else %}badge-gray{% endif %}">🔀 Hybrid</a>
+    </div>
+  </div>
+  {% if categories %}
+  <div>
+    <strong style="font-size:0.85rem;color:#6b7280;">CATEGORY</strong><br>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.4rem;">
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}" class="badge {% if selected_category == cat.slug %}badge-green{% else %}badge-gray{% endif %}">{{ cat.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% if events %}
+  <div class="grid-3">
+    {% for event in events %}
+    <div class="card">
+      {% if event.cover_image %}
+        <img src="{{ event.cover_image.url }}" alt="{{ event.title }}" style="width:100%;height:160px;object-fit:cover;">
+      {% else %}
+        <div style="width:100%;height:160px;background:linear-gradient(135deg,#16213e,#0f3460);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+          {% if event.mode == 'online' %}🌐{% elif event.mode == 'offline' %}📍{% else %}🔀{% endif %}
+        </div>
+      {% endif %}
+      <div class="card-body">
+        <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;">
+          {% if event.mode == 'online' %}<span class="badge badge-blue">Online</span>
+          {% elif event.mode == 'offline' %}<span class="badge badge-orange">Offline</span>
+          {% else %}<span class="badge badge-green">Hybrid</span>{% endif %}
+          {% if event.category %}<span class="badge badge-gray">{{ event.category.name }}</span>{% endif %}
+          {% if event.is_full %}<span class="badge" style="background:#fee2e2;color:#991b1b;">Full</span>{% endif %}
+        </div>
+        <h3 style="margin-bottom:0.5rem;font-size:1.05rem;line-height:1.4;">
+          <a href="{{ event.get_absolute_url }}" style="text-decoration:none;color:inherit;">{{ event.title }}</a>
+        </h3>
+        <p style="color:#6b7280;font-size:0.85rem;margin-bottom:1rem;">{{ event.description|truncatewords:15 }}</p>
+        <div style="font-size:0.82rem;color:#9ca3af;display:flex;flex-direction:column;gap:0.3rem;">
+          <span>📅 {{ event.start_dt|date:"M d, Y · g:i A" }}</span>
+          {% if event.venue %}<span>📍 {{ event.venue }}</span>{% endif %}
+          <span>👥 {{ event.rsvp_count }} going{% if event.max_rsvp %} · {{ event.seats_left }} seats left{% endif %}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="text-align:center;padding:4rem;color:#9ca3af;">
+    <p style="font-size:3rem;">📭</p>
+    <p>No events scheduled yet. Stay tuned!</p>
+  </div>
+{% endif %}
+{% endblock %}

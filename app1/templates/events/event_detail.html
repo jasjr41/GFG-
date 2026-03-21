@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} — GFG CGC{% endblock %}
+
+{% block extra_css %}
+<style>
+  .detail-wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .det-header { margin-bottom: 2rem; }
+  .det-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .det-badge {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    padding: 0.28rem 0.75rem; border-radius: 100px;
+  }
+  .db-online  { background:rgba(59,130,246,.1);  color:#60a5fa; border:1px solid rgba(59,130,246,.25); }
+  .db-offline { background:rgba(249,115,22,.1);  color:#fb923c; border:1px solid rgba(249,115,22,.25); }
+  .db-hybrid  { background:rgba(0,255,135,.08);  color:#00ff87; border:1px solid rgba(0,255,135,.22); }
+  .db-cat     { background:rgba(255,255,255,.05); color:#7d8590; border:1px solid rgba(255,255,255,.1); }
+  .db-full    { background:rgba(239,68,68,.1);   color:#f87171; border:1px solid rgba(239,68,68,.22); }
+
+  .det-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800; color: #dde6f0;
+    line-height: 1.2; margin-bottom: 1.5rem;
+  }
+
+  /* ── INFO GRID ── */
+  .det-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    background: rgba(14,21,32,0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+    position: relative; overflow: hidden;
+  }
+  .det-info-grid::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #00ff87, transparent);
+  }
+  .det-info-cell {}
+  .det-info-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem;
+    color: #3a4a58; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .det-info-val {
+    font-family: 'DM Sans', sans-serif; font-size: 0.92rem;
+    font-weight: 500; color: #dde6f0; line-height: 1.4;
+  }
+  .det-info-val .sub-val {
+    font-size: 0.8rem; color: #7d8590; font-weight: 300; margin-top: 0.1rem;
+  }
+
+  /* ── LOCATION CELL (special) ── */
+  .det-location-cell {}
+  .det-maps-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: #fb923c; text-decoration: none;
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.22);
+    padding: 0.3rem 0.75rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .det-maps-btn:hover {
+    background: rgba(249,115,22,0.15);
+    color: #fdba74;
+    transform: translateY(-1px);
+  }
+  .det-meet-btn {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.5rem;
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: #60a5fa; text-decoration: none;
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.22);
+    padding: 0.3rem 0.75rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .det-meet-btn:hover {
+    background: rgba(59,130,246,0.15);
+    transform: translateY(-1px);
+  }
+
+  /* ── RSVP SECTION ── */
+  .rsvp-box {
+    background: rgba(14,21,32,0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex; align-items: center;
+    gap: 1.5rem; flex-wrap: wrap;
+  }
+  .rsvp-box-left { flex: 1; min-width: 200px; }
+  .rsvp-going-count {
+    font-family: 'Syne', sans-serif; font-size: 2rem;
+    font-weight: 800; color: #00ff87; line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+  .rsvp-going-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    color: #3a4a58; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .rsvp-bar-wrap { margin-top: 0.75rem; }
+  .rsvp-bar {
+    height: 5px; border-radius: 3px;
+    background: rgba(255,255,255,0.06); overflow: hidden;
+    margin-bottom: 0.35rem;
+  }
+  .rsvp-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, #2F8D46, #00ff87);
+  }
+  .rsvp-bar-fill.full { background: linear-gradient(90deg,#c0392b,#ef4444); }
+  .rsvp-bar-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #3a4a58;
+  }
+  .rsvp-box-right {}
+  .btn-rsvp-go {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: #2F8D46; color: #fff;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+    padding: 0.8rem 1.75rem; border-radius: 9px; text-decoration: none;
+    transition: all 0.22s;
+    box-shadow: 0 0 20px rgba(47,141,70,0.28);
+  }
+  .btn-rsvp-go:hover { background:#267a3c; transform:translateY(-2px); box-shadow:0 0 32px rgba(47,141,70,0.4); }
+  .btn-rsvp-cancel {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(239,68,68,0.1); color: #f87171;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+    padding: 0.8rem 1.75rem; border-radius: 9px; text-decoration: none;
+    border: 1px solid rgba(239,68,68,0.22);
+    transition: all 0.22s;
+  }
+  .btn-rsvp-cancel:hover { background:rgba(239,68,68,0.18); }
+  .rsvp-confirmed-note {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
+    color: #00ff87; margin-top: 0.6rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .btn-rsvp-login {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent; color: #dde6f0;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.92rem;
+    padding: 0.75rem 1.6rem; border-radius: 9px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12); transition: all 0.22s;
+  }
+  .btn-rsvp-login:hover { border-color:rgba(0,255,135,.35); color:#00ff87; background:rgba(0,255,135,.05); }
+
+  /* ── COVER ── */
+  .det-cover {
+    width: 100%; border-radius: 14px; margin-bottom: 2rem;
+    max-height: 420px; object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* ── DESCRIPTION ── */
+  .det-desc-wrap {
+    background: rgba(14,21,32,0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; padding: 2rem;
+  }
+  .det-desc-lbl {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    color: #00ff87; letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .det-desc-lbl::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(0,255,135,0.3), transparent);
+  }
+  .det-desc-body {
+    font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    font-weight: 300; color: #8899aa; line-height: 1.85;
+    white-space: pre-line;
+  }
+
+  /* ── MAP EMBED ── */
+  .det-map-wrap {
+    margin-top: 1.5rem;
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .det-map-header {
+    background: rgba(14,21,32,0.9);
+    padding: 0.75rem 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .det-map-title {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    color: #fb923c; letter-spacing: 0.08em;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .det-map-open {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem;
+    color: #fb923c; text-decoration: none;
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.2);
+    padding: 0.25rem 0.65rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .det-map-open:hover { background: rgba(249,115,22,0.16); }
+  .det-map-iframe {
+    width: 100%; height: 280px; border: none; display: block;
+    filter: invert(0.9) hue-rotate(180deg) saturate(0.7) brightness(0.85);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-wrap">
+
+  <!-- ── HEADER ── -->
+  <div class="det-header reveal">
+    <div class="det-badges">
+      <span class="det-badge db-{{ event.mode }}">
+        {% if event.mode == 'online' %}🌐{% elif event.mode == 'offline' %}📍{% else %}🔀{% endif %}
+        {{ event.get_mode_display }}
+      </span>
+      {% if event.category %}<span class="det-badge db-cat">{{ event.category.name }}</span>{% endif %}
+      {% for tag in event.tags.all %}<span class="det-badge db-cat"># {{ tag.name }}</span>{% endfor %}
+      {% if event.is_full %}<span class="det-badge db-full">FULL</span>{% endif %}
+    </div>
+    <h1 class="det-title">{{ event.title }}</h1>
+  </div>
+
+  <!-- ── INFO GRID ── -->
+  <div class="det-info-grid reveal">
+
+    <!-- Start -->
+    <div class="det-info-cell">
+      <div class="det-info-lbl">📅 Starts</div>
+      <div class="det-info-val">
+        {{ event.start_dt|date:"F d, Y" }}
+        <div class="sub-val">{{ event.start_dt|date:"l · g:i A" }}</div>
+      </div>
+    </div>
+
+    <!-- End -->
+    <div class="det-info-cell">
+      <div class="det-info-lbl">🏁 Ends</div>
+      <div class="det-info-val">
+        {{ event.end_dt|date:"F d, Y" }}
+        <div class="sub-val">{{ event.end_dt|date:"l · g:i A" }}</div>
+      </div>
+    </div>
+
+    <!-- Location -->
+    {% if event.venue %}
+    <div class="det-info-cell det-location-cell">
+      <div class="det-info-lbl">📍 Location</div>
+      <div class="det-info-val">{{ event.venue }}</div>
+      <a href="https://www.google.com/maps/search/?api=1&query={{ event.venue|urlencode }}"
+         target="_blank" rel="noopener"
+         class="det-maps-btn">
+        📍 Open in Google Maps ↗
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- Online meet link -->
+    {% if event.meet_link %}
+    <div class="det-info-cell">
+      <div class="det-info-lbl">🔗 Meeting Link</div>
+      <div class="det-info-val">Online Session</div>
+      <a href="{{ event.meet_link }}" target="_blank" rel="noopener"
+         class="det-meet-btn">
+        🔗 Join Meeting ↗
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- Organiser -->
+    <div class="det-info-cell">
+      <div class="det-info-lbl">👤 Organised by</div>
+      <div class="det-info-val">
+        {{ event.organizer.get_full_name|default:event.organizer.username }}
+      </div>
+    </div>
+
+    <!-- Attendees -->
+    <div class="det-info-cell">
+      <div class="det-info-lbl">👥 Attendees</div>
+      <div class="det-info-val">
+        {{ event.rsvp_count }} going
+        {% if event.max_rsvp %}
+          <div class="sub-val">{{ event.seats_left }} of {{ event.max_rsvp }} seats left</div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div><!-- /det-info-grid -->
+
+  <!-- ── RSVP BOX ── -->
+  <div class="rsvp-box reveal">
+    <div class="rsvp-box-left">
+      <div class="rsvp-going-count">{{ event.rsvp_count }}</div>
+      <div class="rsvp-going-lbl">people going</div>
+      {% if event.max_rsvp %}
+      <div class="rsvp-bar-wrap">
+        <div class="rsvp-bar">
+          <div class="rsvp-bar-fill {% if event.is_full %}full{% endif %}"
+               style="width:{% widthratio event.rsvp_count event.max_rsvp 100 %}%;">
+          </div>
+        </div>
+        <div class="rsvp-bar-lbl">{{ event.seats_left }} seats remaining of {{ event.max_rsvp }}</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="rsvp-box-right">
+      {% if user.is_authenticated %}
+        {% if user_rsvp and user_rsvp.status == 'going' %}
+          <a href="{% url 'rsvp_toggle' event.slug %}" class="btn-rsvp-cancel">✕ Cancel RSVP</a>
+          <div class="rsvp-confirmed-note">✔ You're confirmed — see you there!</div>
+        {% elif event.is_full %}
+          <span class="btn-rsvp-cancel" style="cursor:not-allowed;">Event is Full</span>
+        {% else %}
+          <a href="{% url 'rsvp_toggle' event.slug %}" class="btn-rsvp-go">✔ RSVP — I'm Going!</a>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'login' %}?next={{ request.path }}" class="btn-rsvp-login">Log in to RSVP →</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ── COVER IMAGE ── -->
+  {% if event.cover_image %}
+  <img src="{{ event.cover_image.url }}" alt="{{ event.title }}" class="det-cover reveal">
+  {% endif %}
+
+  <!-- ── DESCRIPTION ── -->
+  {% if event.description %}
+  <div class="det-desc-wrap reveal">
+    <div class="det-desc-lbl">About this event</div>
+    <div class="det-desc-body">{{ event.description }}</div>
+  </div>
+  {% endif %}
+
+  <!-- ── MAP EMBED (offline / hybrid only) ── -->
+  {% if event.venue and event.mode != 'online' %}
+  <div class="det-map-wrap reveal">
+    <div class="det-map-header">
+      <div class="det-map-title">📍 {{ event.venue }}</div>
+      <a href="https://www.google.com/maps/search/?api=1&query={{ event.venue|urlencode }}"
+         target="_blank" rel="noopener" class="det-map-open">
+        Open in Maps ↗
+      </a>
+    </div>
+    <iframe
+      class="det-map-iframe"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps?q={{ event.venue|urlencode }}&output=embed">
+    </iframe>
+  </div>
+  {% endif %}
+
+</div><!-- /detail-wrap -->
+{% endblock %}
