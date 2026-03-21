@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Category, Tag, Post, Comment, Event, RSVP, CampusMantri, AboutPage, Achievement, ValueCard, FAQ, \
-    ContactMessage, MemberRole
+    ContactMessage, MemberRole, EventPhoto
 
 
 @admin.register(Category)
@@ -221,3 +221,16 @@ class MemberRoleAdmin(admin.ModelAdmin):
     list_editable = ('role', 'is_active')
     search_fields = ('user__username', 'user__email')
     raw_id_fields = ('user',)
+
+
+class EventPhotoInline(admin.TabularInline):
+    model = EventPhoto
+    extra = 3
+    fields = ('image', 'caption', 'order')
+
+
+@admin.register(EventPhoto)
+class EventPhotoAdmin(admin.ModelAdmin):
+    list_display = ('event', 'caption', 'order', 'uploaded_at')
+    list_filter = ('event',)
+    ordering = ('event', 'order')

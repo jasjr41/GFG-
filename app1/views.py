@@ -947,7 +947,63 @@ def dashboard_achievement_delete(request, pk):
     messages.success(request, 'Achievement deleted.')
     return redirect('dashboard_about')
 
+# ─────────────────────────────────────────────
+# Add to app1/views.py
+# Also add EventPhoto to your model imports
+# ─────────────────────────────────────────────
 
+from .models import EventPhoto   # add to existing import line
+
+@member_required
+def dashboard_event_photos(request, pk):
+    """Manage photos for a specific event."""
+    role  = get_member_role(request.user)
+    if not role.can_manage_events:
+        return redirect('dashboard_home')
+
+    event = get_object_or_404(Event, pk=pk)
+
+    # only admin or event organiser can manage photos
+    if not role.is_admin and event.organizer != request.user:
+        messages.error(request, 'You can only manage photos for your own events.')
+        return redirect('dashboard_events')
+
+    if request.method == 'POST':
+        images  = request.FILES.getlist('photos')
+        caption = request.POST.get('caption', '').strip()
+        if images:
+            for i, img in enumerate(images):
+                last_order = EventPhoto.objects.filter(event=event).count()
+                EventPhoto.objects.create(
+                    event   = event,
+                    image   = img,
+                    caption = caption,
+                    order   = last_order + i,
+                )
+            messages.success(request, f'{len(images)} photo(s) uploaded successfully!')
+        else:
+            messages.error(request, 'Please select at least one photo.')
+        return redirect('dashboard_event_photos', pk=pk)
+
+    photos = event.photos.all()
+    return render(request, 'dashboard/event_photos.html', {
+        'role':   role,
+        'event':  event,
+        'photos': photos,
+    })
+
+
+@member_required
+def dashboard_event_photo_delete(request, pk, photo_pk):
+    """Delete a single event photo."""
+    role = get_member_role(request.user)
+    if not role.can_manage_events:
+        return redirect('dashboard_home')
+    photo = get_object_or_404(EventPhoto, pk=photo_pk, event__pk=pk)
+    photo.image.delete(save=False)   # delete actual file
+    photo.delete()
+    messages.success(request, 'Photo deleted.')
+    return redirect('dashboard_event_photos', pk=pk)
 # ── VALUES ───────────────────────────────────
 
 @member_required

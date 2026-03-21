@@ -140,6 +140,22 @@ class Event(models.Model):
         return self.title
 
 
+class EventPhoto(models.Model):
+    """Multiple photos for a single event — scrollable gallery."""
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='photos')
+    image = models.ImageField(upload_to='event_photos/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'uploaded_at']
+        verbose_name = 'Event Photo'
+        verbose_name_plural = 'Event Photos'
+
+    def __str__(self):
+        return f"{self.event.title} — Photo {self.order}"
+
 class RSVP(models.Model):
     STATUS_CHOICES = [("going", "Going"), ("not_going", "Not Going")]
 
