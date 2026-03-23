@@ -76,7 +76,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+import dj_database_url
+import os
 
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.parse(
+        DATABASE_URL, conn_max_age=600
+    )
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -89,6 +96,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+<<<<<<< HEAD
 import dj_database_url
 import os
 
@@ -97,3 +105,5 @@ if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
         DATABASE_URL, conn_max_age=600
     )
+=======
+>>>>>>> 72ff6df7d5b4c947620078ae7a13ab5dfacf2f12
