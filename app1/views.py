@@ -52,36 +52,41 @@ def blog_list(request):
         "selected_tag":      tag_slug,
     })
 
-
 def post_detail(request, slug):
-    post     = get_object_or_404(Post, slug=slug, status="published")
-    comments = post.comments.filter(is_active=True)
+    post = get_object_or_404(Post, slug=slug, status='published')
 
-    # Handle new comment submission
-    if request.method == "POST":
+    # ✅ All active comments — no user filter
+    comments = Comment.objects.filter(
+        post=post, is_active=True
+    ).order_by('created_at')
+
+    # ✅ Related posts — same category
+    related_posts = []
+    if post.category:
+        related_posts = Post.objects.filter(
+            status='published',
+            category=post.category
+        ).exclude(pk=post.pk)[:4]
+
+    # ✅ Handle comment POST — only if logged in
+    if request.method == 'POST':
         if not request.user.is_authenticated:
-            messages.error(request, "Please log in to comment.")
-            return redirect("post_detail", slug=slug)
-
-        body = request.POST.get("body", "").strip()
+            from django.contrib.auth.views import redirect_to_login
+            return redirect_to_login(request.path)
+        body = request.POST.get('body', '').strip()
         if body:
-            Comment.objects.create(post=post, author=request.user, body=body)
-            messages.success(request, "Comment posted!")
-        else:
-            messages.error(request, "Comment cannot be empty.")
-        return redirect("post_detail", slug=slug)
+            Comment.objects.create(
+                post=post,
+                author=request.user,
+                body=body
+            )
+            return redirect(post.get_absolute_url())
 
-    related_posts = Post.objects.filter(
-        status="published", category=post.category
-    ).exclude(pk=post.pk)[:3]
-
-    return render(request, "blog/post_detail.html", {
-        "post":          post,
-        "comments":      comments,
-        "related_posts": related_posts,
+    return render(request, 'blog/post_detail.html', {
+        'post':          post,
+        'comments':      comments,
+        'related_posts': related_posts,
     })
-
-
 # ─────────────────────────────────────────────
 #  EVENT VIEWS
 # ─────────────────────────────────────────────
@@ -120,15 +125,17 @@ def event_list(request):
 def event_detail(request, slug):
     event = get_object_or_404(Event, slug=slug, is_published=True)
 
+    # ✅ Only check RSVP if user is logged in
     user_rsvp = None
     if request.user.is_authenticated:
-        user_rsvp = RSVP.objects.filter(event=event, user=request.user).first()
+        user_rsvp = RSVP.objects.filter(
+            event=event, user=request.user
+        ).first()
 
-    return render(request, "events/event_detail.html", {
-        "event":     event,
-        "user_rsvp": user_rsvp,
+    return render(request, 'events/event_detail.html', {
+        'event':     event,
+        'user_rsvp': user_rsvp,
     })
-
 
 @login_required
 def rsvp_toggle(request, slug):
