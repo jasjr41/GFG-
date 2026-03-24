@@ -94,16 +94,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< HEAD
+
 import dj_database_url
 import os
-
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
         DATABASE_URL, conn_max_age=600
     )
-=======
->>>>>>> 72ff6df7d5b4c947620078ae7a13ab5dfacf2f12
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://gfgcgcuni.onrender.com',
+]
