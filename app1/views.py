@@ -745,7 +745,7 @@ def dashboard_team_create(request):
         linkedin = request.POST.get('linkedin', '').strip()
         twitter = request.POST.get('twitter', '').strip()
         instagram = request.POST.get('instagram', '').strip()
-        gfg_profile = request.POST.get('gfg_profile', '').strip()
+        JR_profile = request.POST.get('JR_profile', '').strip()
         leetcode = request.POST.get('leetcode', '').strip()
         email = request.POST.get('email', '').strip()
         portfolio = request.POST.get('portfolio', '').strip()
@@ -756,7 +756,7 @@ def dashboard_team_create(request):
             member = TeamMember.objects.create(
                 name=name, role=role_title, branch=branch, year=year,
                 bio=bio, skills=skills, github=github, linkedin=linkedin,
-                twitter=twitter, instagram=instagram, gfg_profile=gfg_profile,
+                twitter=twitter, instagram=instagram, JR_profile=JR_profile,
                 leetcode=leetcode, email=email, portfolio=portfolio,
                 order=order, is_active=is_active,
                 team_id=team_id,
@@ -795,7 +795,7 @@ def dashboard_team_edit(request, pk):
         member.linkedin = request.POST.get('linkedin', '').strip()
         member.twitter = request.POST.get('twitter', '').strip()
         member.instagram = request.POST.get('instagram', '').strip()
-        member.gfg_profile = request.POST.get('gfg_profile', '').strip()
+        member.JR_profile = request.POST.get('JR_profile', '').strip()
         member.leetcode = request.POST.get('leetcode', '').strip()
         member.email = request.POST.get('email', '').strip()
         member.portfolio = request.POST.get('portfolio', '').strip()
@@ -1200,7 +1200,7 @@ def chatbot_api(request):
         context = _build_context()
 
         # ── System prompt ─────────────────────────────────────
-        system_prompt = f"""You are GFG Bot, the friendly AI assistant for the GFG CGC Chapter (GeeksForGeeks Chapter at Chandigarh Group of Colleges).
+        system_prompt = f"""You are JR Bot, the friendly AI assistant for the JR CGC Chapter (GeeksForGeeks Chapter at Chandigarh Group of Colleges).
 
 You help visitors learn about:
 - Upcoming events and how to RSVP
@@ -1230,7 +1230,7 @@ Never make up events or data — only use what's in the context below.
 
         gemini_history = [
             {'role': 'user', 'parts': [system_prompt]},
-            {'role': 'model', 'parts': ["Understood. I will answer as GFG Bot using only this context."]}
+            {'role': 'model', 'parts': ["Understood. I will answer as JR Bot using only this context."]}
         ]
         
         for h in history[-6:]:
@@ -1361,7 +1361,7 @@ def _build_context():
 
     # ── HOW TO JOIN ──
     lines.append("""
-HOW TO JOIN GFG CGC:
+HOW TO JOIN JR CGC:
 - Joining is FREE and open to all CGC students
 - Attend any event to get started — no registration needed
 - RSVP to events on the website at /events/
