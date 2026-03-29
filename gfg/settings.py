@@ -87,18 +87,24 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-import dj_database_url
 import os
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(
-        DATABASE_URL, conn_max_age=600
-    )
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Database - Force SQLite only
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://gfgcgcuni.onrender.com',
 ]
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyC31faVWRhImHyZYZXjGRZBZFBBI1kzEPU')
+
+GEMINI_API_KEY = "AIzaSyC31faVWRhImHyZYZXjGRZBZFBBI1kzEPU"

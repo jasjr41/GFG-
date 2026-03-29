@@ -125,7 +125,7 @@ def event_list(request):
 def event_detail(request, slug):
     event = get_object_or_404(Event, slug=slug, is_published=True)
 
-    # ✅ Only check RSVP if user is logged in
+
     user_rsvp = None
     if request.user.is_authenticated:
         user_rsvp = RSVP.objects.filter(
@@ -293,6 +293,21 @@ from .models import (
 
 def get_member_role(user):
     """Return MemberRole if user has active access, else None."""
+    if user is None or not user.is_authenticated:
+        return None
+
+    # Superusers and Staff ALWAYS have access — ensure they have an active MemberRole record
+    if user.is_superuser or user.is_staff:
+        from .models import MemberRole
+        role, created = MemberRole.objects.get_or_create(
+            user=user,
+            defaults={'role': 'admin', 'is_active': True}
+        )
+        if not role.is_active:
+            role.is_active = True
+            role.save()
+        return role
+
     try:
         role = user.member_role
         return role if role.is_active else None
@@ -1163,3 +1178,207 @@ def dashboard_contact_delete(request, pk):
     get_object_or_404(ContactMessage, pk=pk).delete()
     messages.success(request, 'Message deleted.')
     return redirect('dashboard_contacts')
+# ─────────────────────────────────────────────
+# Add to app1/views.py
+# ─────────────────────────────────────────────
+
+import json
+import os
+import google.generativeai as genai
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils import timezone
+from django.conf import settings
+
+
+@csrf_exempt
+@require_POST
+def chatbot_api(request):
+    """
+    Receives a message from the chatbot widget,
+    builds a context from the live DB, calls Gemini API,
+    returns the response as JSON.
+    """
+    try:
+        data    = json.loads(request.body)
+        message = data.get('message', '').strip()
+        history = data.get('history', [])   # previous messages for context
+
+        if not message:
+            return JsonResponse({'error': 'Empty message'}, status=400)
+
+        # ── Build live context from database ──────────────────
+        context = _build_context()
+
+        # ── System prompt ─────────────────────────────────────
+        system_prompt = f"""You are GFG Bot, the friendly AI assistant for the GFG CGC Chapter (GeeksForGeeks Chapter at Chandigarh Group of Colleges).
+
+You help visitors learn about:
+- Upcoming events and how to RSVP
+- Blog posts and articles written by members
+- The chapter's story, vision, mission and values
+- FAQs about joining the community
+- Team and campus mantri info
+
+Always be helpful, friendly and encouraging. Keep responses concise (2-4 sentences max unless listing items).
+Use emojis occasionally to match the tech community vibe 🚀
+If asked something you don't know, say "I'm not sure about that — reach out to us at our contact page!"
+
+Never make up events or data — only use what's in the context below.
+
+━━━ LIVE WEBSITE DATA ━━━
+{context}
+━━━━━━━━━━━━━━━━━━━━━━━━"""
+
+        # ── Call Gemini API ────────────────────────────────────
+        api_key = getattr(settings, 'GEMINI_API_KEY', os.environ.get('GEMINI_API_KEY', ''))
+        if not api_key or api_key == 'TODO_YOUR_GEMINI_KEY_HERE':
+            return JsonResponse({
+                'response': "I'm not available right now — the API key is not configured. Please contact us directly!"
+            })
+
+        genai.configure(api_key=api_key)
+
+        gemini_history = [
+            {'role': 'user', 'parts': [system_prompt]},
+            {'role': 'model', 'parts': ["Understood. I will answer as GFG Bot using only this context."]}
+        ]
+        
+        for h in history[-6:]:
+            role = 'model' if h.get('role') == 'assistant' else 'user'
+            if h.get('content'):
+                gemini_history.append({'role': role, 'parts': [h['content']]})
+                
+        gemini_history.append({'role': 'user', 'parts': [message]})
+
+        model = genai.GenerativeModel(model_name='gemini-flash-latest')
+
+        response = model.generate_content(gemini_history)
+
+        return JsonResponse({'response': response.text})
+
+    except Exception as e:
+        import traceback
+        err_msg = traceback.format_exc()
+        print(f"Chatbot Error: {err_msg}")
+        return JsonResponse({'response': f"Something went wrong: {str(e)}"})
+
+
+def _build_context():
+    """Fetch live data from DB and format as text for Claude."""
+    from .models import Event, Post, AboutPage, FAQ, CampusMantri, SiteStats
+    now = timezone.now()
+    lines = []
+
+    # ── STATS ──
+    try:
+        stats = SiteStats.get()
+        lines.append(f"CHAPTER STATS: {stats.members}+ members, {stats.events_hosted} events hosted, {stats.years_running} years running, {stats.active_teams} active teams")
+    except:
+        pass
+
+    # ── ABOUT ──
+    try:
+        about = AboutPage.get()
+        if about.hero_heading:
+            lines.append(f"ABOUT: {about.hero_heading}")
+        if about.vision_text:
+            lines.append(f"VISION: {about.vision_text[:300]}")
+        if about.mission_text:
+            lines.append(f"MISSION: {about.mission_text[:300]}")
+        if about.contact_email:
+            lines.append(f"CONTACT EMAIL: {about.contact_email}")
+        if about.contact_phone:
+            lines.append(f"CONTACT PHONE: {about.contact_phone}")
+    except:
+        pass
+
+    # ── UPCOMING EVENTS ──
+    try:
+        events = Event.objects.filter(
+            is_published=True, start_dt__gte=now
+        ).order_by('start_dt')[:8]
+
+        if events:
+            lines.append("\nUPCOMING EVENTS:")
+            for e in events:
+                venue = e.venue if e.venue else ('Online' if e.meet_link else 'TBA')
+                rsvp_info = f"{e.rsvp_count} going"
+                if e.max_rsvp:
+                    rsvp_info += f", {e.seats_left} seats left"
+                lines.append(
+                    f"- {e.title} | {e.start_dt.strftime('%B %d, %Y at %I:%M %p')} | "
+                    f"{e.get_mode_display()} | {venue} | {rsvp_info} | "
+                    f"URL: /events/{e.slug}/"
+                )
+                if e.description:
+                    lines.append(f"  Description: {e.description[:150]}")
+    except:
+        pass
+
+    # ── PAST EVENTS ──
+    try:
+        past = Event.objects.filter(
+            is_published=True, start_dt__lt=now
+        ).order_by('-start_dt')[:4]
+        if past:
+            lines.append("\nRECENT PAST EVENTS:")
+            for e in past:
+                lines.append(f"- {e.title} | {e.start_dt.strftime('%B %d, %Y')} | {e.rsvp_count} attended")
+    except:
+        pass
+
+    # ── BLOG POSTS ──
+    try:
+        posts = Post.objects.filter(
+            status='published'
+        ).order_by('-created_at')[:8]
+
+        if posts:
+            lines.append("\nRECENT BLOG POSTS:")
+            for p in posts:
+                cat = p.category.name if p.category else 'General'
+                excerpt = p.excerpt or (p.content[:150] if p.content else '')
+                lines.append(
+                    f"- {p.title} | Category: {cat} | "
+                    f"By: {p.author.get_full_name() or p.author.username} | "
+                    f"URL: /blog/{p.slug}/"
+                )
+                if excerpt:
+                    lines.append(f"  Summary: {excerpt[:150]}")
+    except:
+        pass
+
+    # ── FAQs ──
+    try:
+        faqs = FAQ.objects.filter(is_active=True).order_by('order')[:10]
+        if faqs:
+            lines.append("\nFREQUENTLY ASKED QUESTIONS:")
+            for f in faqs:
+                lines.append(f"Q: {f.question}")
+                lines.append(f"A: {f.answer[:200]}")
+    except:
+        pass
+
+    # ── CAMPUS MANTRI ──
+    try:
+        mantris = CampusMantri.objects.filter(is_active=True)
+        if mantris:
+            lines.append("\nCAMPUS MANTRI:")
+            for m in mantris:
+                lines.append(f"- {m.name} | {m.title} | {m.branch}, {m.year}")
+    except:
+        pass
+
+    # ── HOW TO JOIN ──
+    lines.append("""
+HOW TO JOIN GFG CGC:
+- Joining is FREE and open to all CGC students
+- Attend any event to get started — no registration needed
+- RSVP to events on the website at /events/
+- Follow our social media for announcements
+- Contact us via the About page contact form
+""")
+
+    return '\n'.join(lines)

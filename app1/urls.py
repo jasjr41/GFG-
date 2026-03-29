@@ -92,4 +92,5 @@ path('dashboard/team/create/',         views.dashboard_team_create, name='dashbo
     path('dashboard/about/contacts/<int:pk>/delete/', views.dashboard_contact_delete, name='dashboard_contact_delete'),
 path('dashboard/events/<int:pk>/photos/',                    views.dashboard_event_photos,       name='dashboard_event_photos'),
     path('dashboard/events/<int:pk>/photos/<int:photo_pk>/delete/', views.dashboard_event_photo_delete, name='dashboard_event_photo_delete'),
+    path('api/chatbot/', views.chatbot_api, name='chatbot_api'),
 ]
