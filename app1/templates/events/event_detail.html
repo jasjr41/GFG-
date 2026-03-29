@@ -369,7 +369,8 @@
           <a href="{% url 'rsvp_toggle' event.slug %}" class="btn-rsvp-go">✔ RSVP — I'm Going!</a>
         {% endif %}
       {% else %}
-        <a href="{% url 'login' %}?next={{ request.path }}" class="btn-rsvp-login">Log in to RSVP →</a>
+        <a href="{% url 'dashboard_login' %}?next={{ request.path }}" class="btn-rsvp-login">
+
       {% endif %}
     </div>
   </div>

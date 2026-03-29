@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@swv-d^bt($pjg7c8$5^n2dou$^awlwh6lc=7@f7p&#-ss8%h9')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['gfgcgcuni.onrender.com', 'localhost', '127.0.0.1']
 
@@ -105,6 +105,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSRF_TRUSTED_ORIGINS = [
     'https://gfgcgcuni.onrender.com',
 ]
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyC31faVWRhImHyZYZXjGRZBZFBBI1kzEPU')
+import os
+from dotenv import load_dotenv
 
-GEMINI_API_KEY = "AIzaSyC31faVWRhImHyZYZXjGRZBZFBBI1kzEPU"
+load_dotenv()   # loads .env file
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

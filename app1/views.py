@@ -51,16 +51,11 @@ def blog_list(request):
         "selected_category": category_slug,
         "selected_tag":      tag_slug,
     })
-
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug, status='published')
 
-    # ✅ All active comments — no user filter
-    comments = Comment.objects.filter(
-        post=post, is_active=True
-    ).order_by('created_at')
+    comments = Comment.objects.filter(post=post, is_active=True)
 
-    # ✅ Related posts — same category
     related_posts = []
     if post.category:
         related_posts = Post.objects.filter(
@@ -68,11 +63,9 @@ def post_detail(request, slug):
             category=post.category
         ).exclude(pk=post.pk)[:4]
 
-    # ✅ Handle comment POST — only if logged in
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            from django.contrib.auth.views import redirect_to_login
-            return redirect_to_login(request.path)
+            return redirect('dashboard_login')  # ✅ fixed
         body = request.POST.get('body', '').strip()
         if body:
             Comment.objects.create(
@@ -121,22 +114,17 @@ def event_list(request):
         "selected_mode":     mode,
     })
 
-
 def event_detail(request, slug):
     event = get_object_or_404(Event, slug=slug, is_published=True)
-
-
-    user_rsvp = None
-    if request.user.is_authenticated:
-        user_rsvp = RSVP.objects.filter(
-            event=event, user=request.user
-        ).first()
-
+    # user_rsvp = None
+    # if request.user.is_authenticated:
+    #     user_rsvp = RSVP.objects.filter(
+    #         event=event, user=request.user
+    #     ).first()
     return render(request, 'events/event_detail.html', {
         'event':     event,
-        'user_rsvp': user_rsvp,
+        # 'user_rsvp': user_rsvp,
     })
-
 @login_required
 def rsvp_toggle(request, slug):
     """Toggle RSVP: going ↔ not_going, or create new."""
