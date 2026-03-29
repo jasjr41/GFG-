@@ -10,7 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-@swv-d^bt($pjg7c8$5^n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gfgcgcuni.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['jrser.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -103,7 +103,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://gfgcgcuni.onrender.com',
+    'https://jrser.onrender.com',
 ]
 import os
 from dotenv import load_dotenv
