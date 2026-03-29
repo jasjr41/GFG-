@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{% block title %}Dashboard — GFG CGC{% endblock %}</title>
+  <title>{% block title %}Dashboard — JR CGC{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -56,7 +56,7 @@
       background: radial-gradient(ellipse at center, transparent 40%, rgba(4,8,12,0.55) 100%);
     }
 
-    /* GFG logo watermark background */
+    /* JR logo watermark background */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -381,7 +381,7 @@
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
-    <div class="sidebar-logo">GFG</div>
+    <div class="sidebar-logo">JR</div>
     <div class="sidebar-brand-text">
       <span class="sidebar-brand-title">CGC CHAPTER</span>
       <span class="sidebar-brand-sub">Member Dashboard</span>
@@ -424,7 +424,7 @@
     </a>
     <a href="{% url 'dashboard_comments' %}"
        class="{% if 'comment' in request.resolver_match.url_name %}active{% endif %}">
-      <span class="nav-icon">💬</span> Comments
+      <span class="nav-icon">💬</span> Commeents
     </a>
     {% endif %}
 

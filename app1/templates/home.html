@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}GFG CGC Chapter — Home{% endblock %}
+{% block title %}JR CGC Chapter — Home{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -317,7 +317,7 @@
       <span class="dim">We Grow Together.</span>
     </h1>
     <p class="hero-p">
-      GFG CGC is a community of passionate developers, problem-solvers and tech enthusiasts at CGC University — learning in public, shipping real things.
+      JR CGC is a community of passionate developers, problem-solvers and tech enthusiasts at CGC University — learning in public, shipping real things.
     </p>
     <div class="hero-btns">
       <a href="{% url 'event_list' %}" class="btn-hp">Explore Events →</a>
@@ -390,8 +390,8 @@
         <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:#3a4a58;margin-left:.5rem;">community.py</span>
       </div>
       <div class="code-body">
-<span class="code-kw">class</span> <span class="code-fn">GFGChapter</span>:<br>
-&nbsp;&nbsp;name    = <span class="code-st">"GFG CGC"</span><br>
+<span class="code-kw">class</span> <span class="code-fn">JRChapter</span>:<br>
+&nbsp;&nbsp;name    = <span class="code-st">"JR CGC"</span><br>
 &nbsp;&nbsp;campus  = <span class="code-st">"CGC University"</span><br>
 &nbsp;&nbsp;members = <span class="code-nm">{{ stats.members }}+</span><br>
 &nbsp;&nbsp;mission = <span class="code-st">"Empower student devs"</span><br>
@@ -436,7 +436,7 @@
 <div class="sec reveal">
   <div class="lbl">// campus mantri</div>
   <h2 class="ttl">Our <span class="gold">Campus</span> Mantri</h2>
-  <p class="sub">The official GFG Campus Ambassador bridging students with the GeeksForGeeks ecosystem.</p>
+  <p class="sub">The official JR Campus Ambassador bridging students with the GeeksForGeeks ecosystem.</p>
 
   <div class="mantri-grid">
     {% for m in campus_mantris %}
@@ -471,7 +471,7 @@
         {% if m.github   %}<a href="{{ m.github }}"   target="_blank" class="m-soc" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>{% endif %}
         {% if m.twitter  %}<a href="{{ m.twitter }}"  target="_blank" class="m-soc" title="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>{% endif %}
         {% if m.instagram%}<a href="{{ m.instagram}}" target="_blank" class="m-soc" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>{% endif %}
-        {% if m.gfg_profile %}<a href="{{ m.gfg_profile }}" target="_blank" class="m-soc" title="GFG">GFG</a>{% endif %}
+        {% if m.JR_profile %}<a href="{{ m.JR_profile }}" target="_blank" class="m-soc" title="JR">JR</a>{% endif %}
         {% if m.leetcode   %}<a href="{{ m.leetcode }}"    target="_blank" class="m-soc" title="LeetCode">LC</a>{% endif %}
         {% if m.email      %}<a href="mailto:{{ m.email }}" class="m-soc" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/></svg></a>{% endif %}
         {% if m.portfolio  %}<a href="{{ m.portfolio }}"   target="_blank" class="m-soc" title="Portfolio">↗</a>{% endif %}
@@ -519,7 +519,7 @@
           <div class="blog-cat">{% if forloop.counter == 1 %}DSA{% elif forloop.counter == 2 %}Web Dev{% else %}AI/ML{% endif %}</div>
           <h3>{% if forloop.counter == 1 %}Understanding Binary Search Trees{% elif forloop.counter == 2 %}Building REST APIs with Django{% else %}Intro to Neural Networks{% endif %}</h3>
           <p>Community articles coming soon. Be the first to publish your knowledge.</p>
-          <div class="blog-foot"><span>GFG CGC</span><span>Coming soon</span></div>
+          <div class="blog-foot"><span>JR CGC</span><span>Coming soon</span></div>
         </div>
       </div>
       {% endfor %}
@@ -606,7 +606,7 @@
           {% if member.twitter  %}<a href="{{ member.twitter }}"  target="_blank" class="t-soc" title="Twitter">𝕏</a>{% endif %}
           {% if member.linkedin %}<a href="{{ member.linkedin }}" target="_blank" class="t-soc" title="LinkedIn">in</a>{% endif %}
           {% if member.github   %}<a href="{{ member.github }}"   target="_blank" class="t-soc" title="GitHub">gh</a>{% endif %}
-          {% if member.gfg_profile %}<a href="{{ member.gfg_profile }}" target="_blank" class="t-soc" title="GFG">G</a>{% endif %}
+          {% if member.JR_profile %}<a href="{{ member.JR_profile }}" target="_blank" class="t-soc" title="JR">G</a>{% endif %}
         </div>
       </div>
       {% empty %}

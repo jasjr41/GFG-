@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{% block title %}GFG CGC Chapter{% endblock %}</title>
+  <title>{% block title %}JR CGC Chapter{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -433,7 +433,7 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ══════════════════════════════════════
-       GFG LOGO WATERMARK BACKGROUND
+       JR LOGO WATERMARK BACKGROUND
     ══════════════════════════════════════ */
     body::before {
       content: '';
@@ -450,7 +450,7 @@
     }
 
     /* ══════════════════════════════════════
-       CUSTOM CURSOR — GFG theme SVG pointer
+       CUSTOM CURSOR — JR theme SVG pointer
     ══════════════════════════════════════ */
     *, *::before, *::after { cursor: none !important; }
 
@@ -623,12 +623,7 @@
 <nav>
   <!-- Brand -->
   <a href="{% url 'index' %}" class="nav-brand">
-    <img
-      src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAqAFEDASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAYHBQgEA//EADkQAAECBQICBggDCQAAAAAAAAECAwAEBQYREiEHExQxQVFhcQgYMlZylKHTIlKBFRYkM0RigpLw/8QAGQEAAgMBAAAAAAAAAAAAAAAAAwQAAQIF/8QAIxEAAgICAgICAwEAAAAAAAAAAQIAAxESBCExQXGBBVFhkf/aAAwDAQACEQMRAD8A7LgggiST5zL7EqwuYmXm2GUDK3HFBKUjvJOwhRmOKVgMPcldyyxVnGW23Fp/2Skj6wocb7HvK67gpyabPB+kLUEFhSghEorG7ivzgjO+5HUBvv55P0faOmUAnK/PuTON1NNoSgHyOT9YWey3YhF/2c23kcs2Faq+h7Pv4laolapNbluk0ioy0612qZcCsefdHvjlq67UuvhLWZatU2ol2UU4EtzTQKQo9fLdRntAO2SD356rGeKFLHCwXiQjpBTyOi5/qsfy/LYqz+XeLS/OQ4wRLo5+dluGrL2fiOdbrNJokqJqr1GWkWSdKVPOBOo9wz1/pC5LcUrAmJgsN3LKpWFacuIWhOfiUkDHjmIbadrXVxbrkzWapUFNSaF6XJpadSUnY8tpGewEeA7dzu9zno+0dUmUydwTzc1jZbrSFIJ+EYP1jAutftF6gV5nLuG9NY1/vuWWWfYmWEvyzzbzSxlK21BSVDvBEfSI7wQse9bUuCoIqU6hikIOnkoVzETS8bLQD7IHacAnqx3WKGK2LLkjE6HHta1NnXU/qEEEEbh4RhX/AF9dr2jPV5uUE4qUCDyS5o1ArSk74OMBWersjdjPuSlS9coE9R5rZqbYU0pWMlORsoeIOD+kU2cHHmYsDFCF846kT9Yd73Tb+fP24PWHe902/nz9uE6y6vNcMb3mqdcdM50urDcyypAVtnKXEZ2O2fMGLrKXrwzmZITaKrREIwCUOoShwf4EZ+kIVvY47fB+JweNdyLgdrtSPIIEkV78ZhdNrztCmLYQymZSAl0TuotqBCgrGjfcRM/2rNfu8KHq/hel9Lxk+3o0dXV1f9303jVxCo9elhb1rSTJlVLBmJoS4Sp0g/hQgYzpyAc9Z2HVnO4rhJNjguGBLari53T+WANe408nPw74/NtAnV7GODnAil1d3JtbV99R5xj6mHZXGdNr2xJUOVtZDqJZBCnDO6S4oklSsaNsknaNj1h3vdNv58/bjI4LcQKPQZdVvXXKISwlwlmZWwFlnJ3QoYzjOe/GTFbnr24ZykmZpdUoridJUEMoS4s+GkDOfOC1MxXp8fQjnGe16gReBj1gdSd+sO97pt/Pn7cV+wK+u6LRka85J9DVNhZ5PM16QlakjfAzkJz1dsc33lV5rihfcnTbfpjcvLJUWpRsNhJ0k5U64R1bDJ7gO07np63KUxQ6DI0iWJLUmwhlKiMFWBgqPiTv+sF47u7HJyIz+OuutsbZ9lHWcY7nvggghudeEEEESSLt7WXb94SiWKzJ63GxhqYbOl1vyV3eByPCJjMej1JKmNUvdEw2zqH4HJMLVju1BQGfHEXCCBPSjnLCK3cKi47OuTEOwuFVsWlMJnm0O1CoJ3TMTODyz/YkDCfPc+MPkEEbVFQYUQ1VSVLqgwIh33wqte7Jpc+6h6Qn17rmJYgcw960kEHzGD4wly/o9SaZjVMXQ+4zn2G5MIVj4isj6RcIIG1FbHJEXs4HHsbZk7i5ZFlW/Z8oWaNJ6XVjDsy6dTzvmru8AAPCGOCCChQowI0iKi6qMCEEEEXNT//Z"
-      alt="GeeksForGeeks"
-      class="nav-brand-logo"
-      style="height:34px;width:auto;filter:brightness(1.1) drop-shadow(0 0 6px rgba(0,255,135,0.3));"
-    >
+
     <div class="nav-brand-divider"></div>
     <div class="nav-brand-text">
       <span class="nav-brand-title">CGC CHAPTER</span>
@@ -681,7 +676,7 @@
   {% block content %}{% endblock %}
 </main>
 <!-- ══════════════════════════════════════════════════════
-     GFG CHATBOT WIDGET
+     JR CHATBOT WIDGET
      Paste this entire block into base.html
      RIGHT BEFORE the closing </body> tag
      (after all other scripts)
@@ -693,7 +688,7 @@
 ════════════════════════════════════════ */
 
 /* floating button */
-#gfg-chat-btn {
+#JR-chat-btn {
   position: fixed; bottom: 5.5rem; right: 2rem; z-index: 9000;
   width: 56px; height: 56px; border-radius: 16px;
   background: linear-gradient(135deg, #2F8D46, #00ff87);
@@ -707,9 +702,9 @@
   0%,100% { box-shadow: 0 4px 24px rgba(0,255,135,.4), 0 0 0 0 rgba(0,255,135,.3); }
   50%      { box-shadow: 0 4px 32px rgba(0,255,135,.5), 0 0 0 10px rgba(0,255,135,0); }
 }
-#gfg-chat-btn:hover { transform: translateY(-3px) scale(1.05); }
-#gfg-chat-btn svg   { width: 26px; height: 26px; }
-#gfg-chat-btn.open  { animation: none; background: linear-gradient(135deg,#c0392b,#ef4444); box-shadow: 0 4px 20px rgba(239,68,68,.4); }
+#JR-chat-btn:hover { transform: translateY(-3px) scale(1.05); }
+#JR-chat-btn svg   { width: 26px; height: 26px; }
+#JR-chat-btn.open  { animation: none; background: linear-gradient(135deg,#c0392b,#ef4444); box-shadow: 0 4px 20px rgba(239,68,68,.4); }
 
 /* unread badge */
 #chat-badge {
@@ -722,7 +717,7 @@
 }
 
 /* chat window */
-#gfg-chat-window {
+#JR-chat-window {
   position: fixed; bottom: 8rem; right: 2rem; z-index: 8999;
   width: 360px; height: 520px;
   background: rgba(8,15,20,.97); backdrop-filter: blur(24px);
@@ -733,11 +728,11 @@
   transition: transform .3s cubic-bezier(.16,1,.3,1), opacity .3s;
   transform-origin: bottom right;
 }
-#gfg-chat-window.open {
+#JR-chat-window.open {
   transform: scale(1) translateY(0); opacity: 1; pointer-events: all;
 }
 @media(max-width:480px) {
-  #gfg-chat-window { width: calc(100vw - 2rem); right: 1rem; bottom: 7rem; }
+  #JR-chat-window { width: calc(100vw - 2rem); right: 1rem; bottom: 7rem; }
 }
 
 /* header */
@@ -885,7 +880,7 @@
 
 
 <!-- ── FLOATING BUTTON ── -->
-<button id="gfg-chat-btn" onclick="toggleChat()" aria-label="Open GFG Bot">
+<button id="JR-chat-btn" onclick="toggleChat()" aria-label="Open JR Bot">
   <div id="chat-badge"></div>
   <!-- chat icon -->
   <svg id="chat-icon-open" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
@@ -900,13 +895,13 @@
 
 
 <!-- ── CHAT WINDOW ── -->
-<div id="gfg-chat-window">
+<div id="JR-chat-window">
 
   <!-- Header -->
   <div class="chat-header">
     <div class="chat-av">🤖</div>
     <div class="chat-header-info">
-      <div class="chat-header-name">GFG Bot</div>
+      <div class="chat-header-name">JR Bot</div>
       <div class="chat-header-status">
         <span class="chat-status-dot"></span>
         Online · Ask me anything!
@@ -921,7 +916,7 @@
   <!-- Quick replies -->
   <div class="chat-quick" id="chatQuick">
     <button class="quick-btn" onclick="quickSend('What events are coming up? 🗓️')">Upcoming events</button>
-    <button class="quick-btn" onclick="quickSend('How do I join GFG CGC?')">How to join</button>
+    <button class="quick-btn" onclick="quickSend('How do I join JR CGC?')">How to join</button>
     <button class="quick-btn" onclick="quickSend('Show me recent blog posts 📝')">Blog posts</button>
     <button class="quick-btn" onclick="quickSend('Tell me about the chapter')">About chapter</button>
   </div>
@@ -937,7 +932,7 @@
     </button>
   </div>
 
-  <div class="chat-powered">Powered by Google Gemini · GFG CGC Chapter</div>
+  <div class="chat-powered">Powered by Google Gemini · JR CGC Chapter</div>
 </div>
 
 
@@ -953,7 +948,7 @@
 
   /* ── INIT ── */
   window.addEventListener('load', () => {
-    addBotMessage("👋 Hi! I'm GFG Bot — your guide to the GFG CGC Chapter! Ask me about upcoming events, blog posts, how to join, or anything about the chapter. 🚀");
+    addBotMessage("👋 Hi! I'm JR Bot — your guide to the JR CGC Chapter! Ask me about upcoming events, blog posts, how to join, or anything about the chapter. 🚀");
     // enable send btn when input has text
     document.getElementById('chat-input').addEventListener('input', () => {
       document.getElementById('chat-send').disabled =
@@ -964,8 +959,8 @@
   /* ── TOGGLE ── */
   window.toggleChat = function () {
     isOpen = !isOpen;
-    const win  = document.getElementById('gfg-chat-window');
-    const btn  = document.getElementById('gfg-chat-btn');
+    const win  = document.getElementById('JR-chat-window');
+    const btn  = document.getElementById('JR-chat-btn');
     const ico1 = document.getElementById('chat-icon-open');
     const ico2 = document.getElementById('chat-icon-close');
     const badge= document.getElementById('chat-badge');
@@ -1133,14 +1128,9 @@
 ══════════════════════════════════════ -->
 <footer>
   <div class="footer-brand">
-    <img
-      src="data:image/png;base64,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"
-      alt="GeeksForGeeks"
-      style="height:26px;width:auto;filter:brightness(0.7);"
-      onerror="this.style.display='none'"
-    >
+
     <div class="footer-brand-info">
-      <span>GFG CGC CHAPTER</span>
+      <span>JR CGC CHAPTER</span>
       <span>Chandigarh Group of Colleges, Punjab</span>
     </div>
   </div>
@@ -1153,7 +1143,7 @@
     <a href="{% url 'index' %}#team">Team</a>
   </div>
 
-  <div class="footer-copy">© 2026 GFG CGC · All rights reserved</div>
+  <div class="footer-copy">© 2026 JR CGC · All rights reserved</div>
 </footer>
 
 <!-- ══════════════════════════════════════
@@ -1340,7 +1330,7 @@ document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 </script>
 
 <!-- ── CURSOR ELEMENTS ── -->
-<!-- SVG arrow cursor — GFG green theme, sharp & minimal -->
+<!-- SVG arrow cursor — JR green theme, sharp & minimal -->
 <svg id="cur-arrow" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <!-- main arrow body -->
   <path d="M3 2L21 12L13.5 13.8L9.5 25L3 2Z"
